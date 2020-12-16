@@ -29,6 +29,7 @@ export interface ExternalSystemInput {
   type: ExternalSystemType;
   username: string;
   apiKey: string;
+  operationMode: string;
 }
 
 export const schema = `
@@ -47,6 +48,7 @@ export const schema = `
     type: ExternalSystemType!
     username: String!
     apiKey: String!
+    operationMode: String!
   }
 
   input ExternalSurveyQuestionFilter {
@@ -67,6 +69,7 @@ export const schema = `
     createdAt: String!
     updatedAt: String!
     syncedAt: String
+    operationMode: String
     lists(after: Cursor, first: Int): ExternalListPage!
     surveyQuestions(filter: ExternalSurveyQuestionFilter, after: Cursor, first: Int): ExternalSurveyQuestionPage!
     activistCodes(filter: ExternalActivistCodeFilter, after: Cursor, first: Int): ExternalActivistCodePage!
