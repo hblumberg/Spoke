@@ -58,22 +58,6 @@ const campaignInfoFragment = `
     id
     title
   }
-  ${
-    disableTexters
-      ? ""
-      : `
-  texters {
-    id
-    firstName
-    lastName
-    assignment(campaignId:$campaignId) {
-      contactsCount
-      needsMessageCount: contactsCount(contactsFilter:{messageStatus:"needsMessage"})
-      maxContacts
-    }
-  }
-  `
-  }
   interactionSteps {
     id
     questionText
@@ -493,6 +477,7 @@ class AdminCampaignEdit extends React.Component {
       {
         title: "Texters",
         content: CampaignTextersForm,
+        isStandalone: true,
         keys: ["texters", "contactsCount", "useDynamicAssignment"],
         checkCompleted: () =>
           (this.state.campaignFormValues.texters.length > 0 &&
@@ -506,12 +491,8 @@ class AdminCampaignEdit extends React.Component {
         expandAfterCampaignStarts: true,
         expandableBySuperVolunteers: true,
         extraProps: {
-          isOverdue: moment().isSameOrAfter(
-            this.props.campaignData.campaign.dueBy
-          ),
           orgTexters: this.props.organizationData.organization.texters,
-          organizationUuid: this.props.organizationData.organization.uuid,
-          campaignId: this.props.campaignData.campaign.id
+          organizationUuid: this.props.organizationData.organization.uuid
         }
       },
       {
@@ -783,12 +764,15 @@ class AdminCampaignEdit extends React.Component {
       <FlatButton key="ok" label="Ok" primary onClick={this.handleCloseError} />
     ];
 
+    console.log("index props", this.props);
+
     return (
       <div>
         {this.renderHeader()}
         {sections.map((section, sectionIndex) => {
           if (section.isStandalone) {
             const { content: Component } = section;
+            console.log("is standalone index", sectionIndex);
             return (
               <Component
                 key={section.title}
@@ -799,6 +783,7 @@ class AdminCampaignEdit extends React.Component {
                 saveLabel={saveLabel}
                 onError={this.handleSectionError}
                 onExpandChange={this.handleExpandChange(sectionIndex)}
+                {...section.extraProps}
               />
             );
           }

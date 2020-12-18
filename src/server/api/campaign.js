@@ -204,7 +204,8 @@ export const resolvers = {
         .limit(1)
         .then((records) => records.length > 0),
     autoassign: () => true,
-    cannedResponses: () => true
+    cannedResponses: () => true,
+    texters: () => true
   },
   CampaignsReturn: {
     __resolveType(obj, _context, _) {
